@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.eurail.distribution.api.client</groupId>
+  <artifactId>client</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>client</name>
+  <url>http://www.eurail.com</url>
+
+  <properties>
+    <project.build.sourceEncoding> UTF-8 </project.build.sourceEncoding>
+    <maven.compiler.source> 1.8 </maven.compiler.source>
+    <maven.compiler.target> 1.8 </maven.compiler.target>
+    <commerce-tools.version> 1.51.0 </commerce-tools.version>
+    <fasterxml.version> 2.9.9 </fasterxml.version>
+    <apache-httpclient.version>4.5.5</apache-httpclient.version>
+    <apache-commons-io.version>1.3.2</apache-commons-io.version>
+    <javax-ws-rs-api.version>2.1</javax-ws-rs-api.version>
+    <lombok.version> 1.16.20 </lombok.version>
+    <junit.version> 4.11 </junit.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.commercetools.sdk.jvm.core</groupId>
+      <artifactId>commercetools-models</artifactId>
+      <version>${commerce-tools.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.commercetools.sdk.jvm.core</groupId>
+      <artifactId>commercetools-java-client</artifactId>
+      <version>${commerce-tools.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${fasterxml.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${fasterxml.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${fasterxml.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>${apache-httpclient.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>fluent-hc</artifactId>
+      <version>${apache-httpclient.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${apache-commons-io.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>${javax-ws-rs-api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
