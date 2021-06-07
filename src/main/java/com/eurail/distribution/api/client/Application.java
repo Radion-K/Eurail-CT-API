@@ -1,6 +1,5 @@
 package com.eurail.distribution.api.client;
 
-import com.eurail.distribution.api.client.executor.GetProductProjectionSearchCtExecutor;
 import com.eurail.distribution.api.client.model.BusinessChannel;
 import com.eurail.distribution.api.client.model.FulfilmentMethod;
 import com.eurail.distribution.api.client.model.Gender;
@@ -11,7 +10,6 @@ import com.eurail.distribution.api.client.service.CartService;
 import com.eurail.distribution.api.client.service.OrderService;
 import com.eurail.distribution.api.client.service.ProductProjectionSearchService;
 import com.eurail.distribution.api.client.service.StateService;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
@@ -27,19 +25,14 @@ import io.sphere.sdk.models.DefaultCurrencyUnits;
 import io.sphere.sdk.models.ResourceIdentifier;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.states.State;
 import io.sphere.sdk.types.CustomFieldsDraft;
-import org.apache.http.HttpResponse;
-
 import javax.money.CurrencyUnit;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -47,8 +40,6 @@ public class Application {
     private static final String API_URL = System.getenv("EURAIL_CT_API_URL");
     private static final String API_PROJECT = System.getenv("EURAIL_CT_API_PROJECT");;
     private static final String API_KEY = System.getenv("EURAIL_CT_API_KEY");
-
-    private static final boolean SHORT_CYCLE = true;
 
     private static final CurrencyUnit CURRENCY = DefaultCurrencyUnits.EUR;
     private static final Locale LOCALE = Locale.UK;
@@ -67,8 +58,7 @@ public class Application {
     private static final Gender GENDER = Gender.UNDEFINED;
     private static final String EMAIL = String.format("%s.%s@local", FIRST_NAME, LAST_NAME);
 
-    public static void main(String[] args) {
-        System.out.println(System.getenv());
+    public static void main(String...args) {
         new Application().startApp();
     }
 
@@ -82,20 +72,7 @@ public class Application {
             final Collection<State> states = stateService.getAll();
 
             //  Read all products and save them. Use your storage for access to products.
-            //  Does not work via service, as service executes Post request. We (Eurail) will implement POST request to make it working.
-//            final Collection<ProductProjection> productProjections = new ProductProjectionSearchService(sphereClient).getAll();
-            //  Read via http executor.
-            final GetProductProjectionSearchCtExecutor getProductProjectionSearchCtExecutor = new GetProductProjectionSearchCtExecutor(API_URL, API_PROJECT, API_KEY);
-            final HttpResponse response = getProductProjectionSearchCtExecutor.exec(new HashMap<String, List<Object>>(){{
-                    put("limit", Collections.singletonList(10));
-                }});
-            if (GetProductProjectionSearchCtExecutor.isOk(response)) {
-                final String bodyAsString = getProductProjectionSearchCtExecutor.getBodyAsString(response);
-                final JsonNode bodyAsJsonNode = getProductProjectionSearchCtExecutor.getBodyAsJson(response);
-                //  TODO. GetProductProjectionSearchCtExecutor already contains ObjectMapper, so implement getBodyAsObject(...) to get result.
-                //  final PagedSearchResult<ProductProjection> pagedSearchResult = getProductProjectionSearchCtExecutor.getBodyAsObject(response, ...)
-            }
-
+            final Collection<ProductProjection> productProjections = new ProductProjectionSearchService(sphereClient).getAll();
 
             //  Create cart
             Cart cart = cartService.create(createCartDraft(
@@ -105,25 +82,25 @@ public class Application {
             //  Get cart by id
             cart = cartService.getById(cart.getId());
 
-            //  TODO. Implement it.
             //  Update cart
             cart = updateCart(cartService, cart, LOCALE, EMAIL);
 
-            //  TODO. Implement it.
             //  Create order
-            Order order = orderService.create(cart, PAYMENT_INTERFACE, SHORT_CYCLE);
+            Order order = orderService.create(cart);
 
-            //  TODO. Implement it.
+            //  Get order by cart
+            order = orderService.getByCart(cart);
+
             //  Get order by id
             order = orderService.getById(order.getId());
 
             //  TODO. Implement it.
-            //  Get order by cart-id
-            order = orderService.getByCartId(order.getCart().getId());
-
-            //  TODO. Implement it.
             //  Get refundable line items
             RefundableLineItems refundableLineItems = orderService.getRefundableLineItems(order);
+
+            //  TODO. Implement it.
+            //  Create refund
+            order = orderService.createRefund(order, null);
 
         } catch (final Exception e) {
             System.out.println(e);
@@ -152,8 +129,7 @@ public class Application {
             final String lastName,
             final LocalDate dateOfBirth,
             final Gender gender,
-            final CountryCode countryOfResidence
-    ) {
+            final CountryCode countryOfResidence) {
 
         final CartDraftBuilder cartDraftBuilder = CartDraftBuilder.of(CURRENCY)
                 //  Set these fields later to show how update cart works
