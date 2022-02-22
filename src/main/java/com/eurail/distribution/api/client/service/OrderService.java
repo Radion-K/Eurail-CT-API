@@ -1,14 +1,17 @@
 package com.eurail.distribution.api.client.service;
 
-import com.eurail.distribution.api.client.model.RefundLineItems;
+import com.eurail.distribution.api.client.model.MobilePassInfo;
 import com.eurail.distribution.api.client.model.RefundableLineItems;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.OrderFromCartDraft;
 import io.sphere.sdk.orders.commands.OrderFromCartCreateCommand;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
 import io.sphere.sdk.orders.queries.OrderQuery;
+
+import java.util.Collection;
 
 /**
  * Created  01/05/2018 09:00
@@ -35,13 +38,21 @@ public class OrderService extends AbstractService<Order> {
     }
 
     public RefundableLineItems getRefundableLineItems(final Order order) {
-        //  TODO Implement OrderCreateCommand
+        //  TODO Implement it
         //  return executeRequest(OrderGetRefundableLineItemsCommand.of(cart.getId()));
-        throw new UnsupportedOperationException("RefundableLineItems not implemented yet");
+        throw new UnsupportedOperationException("getRefundableLineItems not implemented yet");
     }
 
-    public Order createRefund(final Order order, final RefundLineItems refundLineItems) {
+    public Order createRefund(final Order order, final Collection<LineItem> lineItems) {
         //  TODO Implement it
-        throw new UnsupportedOperationException("getByCartId not implemented yet");
+        //  return executeRequest(OrderCreateRefundCommand.of(order, Collection<LineItem> lineItems));
+        throw new UnsupportedOperationException("createRefund not implemented yet");
     }
+
+    public MobilePassInfo getMobilePassInfo(final String orderId, final String lineItemId) {
+        //  TODO Implement it
+        //  return executeRequest(GetMobilePassInfoCommand.of(orderId, lineItemId));
+        throw new UnsupportedOperationException("getMobilePassInfo not implemented yet");
+    }
+
 }

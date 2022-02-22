@@ -89,7 +89,7 @@ public abstract class AbstractHttpExecutor {
     }
 
     public static Map<String, String> getHeaders(HttpResponse httpResponse) {
-        return new HashMap<String, String>() {{
+        return new HashMap<>() {{
             for (final Header header : httpResponse.getAllHeaders()) {
                 put(header.getName(), header.getValue());
             }

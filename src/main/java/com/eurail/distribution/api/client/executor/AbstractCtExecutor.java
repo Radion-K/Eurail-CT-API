@@ -9,7 +9,6 @@ import org.apache.http.client.fluent.Request;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +24,7 @@ public abstract class AbstractCtExecutor extends AbstractHttpExecutor {
     private static final ObjectMapper CT_OBJECT_MAPPER = SphereJsonUtils.newObjectMapper();
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer";
-    private static final Map<String, String> HEADERS = Collections.unmodifiableMap(new HashMap<String, String>() {{
-        put("Content-Type", MediaType.APPLICATION_JSON);
-    }});
+    private static final Map<String, String> HEADERS = Map.of("Content-Type", MediaType.APPLICATION_JSON);
     private final String project;
     private final String accessToken;
 
@@ -60,7 +57,7 @@ public abstract class AbstractCtExecutor extends AbstractHttpExecutor {
     }
 
     protected Map<String, Object> createHeaders() {
-        return new HashMap<String, Object>(getDefaultHeaders()){{
+        return new HashMap<>(getDefaultHeaders()){{
             put(AUTHORIZATION, BEARER + " " + getAccessToken());
         }};
     }
@@ -107,5 +104,4 @@ public abstract class AbstractCtExecutor extends AbstractHttpExecutor {
         }
         return sb.subSequence(0, sb.length() - 1).toString();
     }
-
 }

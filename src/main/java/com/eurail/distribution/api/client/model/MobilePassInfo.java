@@ -3,7 +3,7 @@ package com.eurail.distribution.api.client.model;
 import lombok.Value;
 
 /**
- * Created 08/04/2021
+ * Created 22/02/2022
  * Copyright (c) 2021 Eurail.com B.V.
  *
  * @author Radion, Rodion.Kyryliak@eurail.com
@@ -11,6 +11,6 @@ import lombok.Value;
 
 
 @Value
-public class RefundLineItems {
+public class MobilePassInfo {
     //  TODO Implement it
 }

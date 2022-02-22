@@ -2,18 +2,11 @@ package com.eurail.distribution.api.client.service;
 
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
-import io.sphere.sdk.queries.PagedQueryResult;
-import io.sphere.sdk.search.FilterExpression;
 import io.sphere.sdk.search.PagedSearchResult;
-import io.sphere.sdk.search.SortExpression;
-import io.sphere.sdk.types.Type;
-import io.sphere.sdk.types.queries.TypeQuery;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * Created  18/12/2020
@@ -29,7 +22,7 @@ public class ProductProjectionSearchService extends AbstractService<ProductProje
     }
 
     public Collection<ProductProjection> getAll() {
-        return new ArrayList<ProductProjection>() {{
+        return new ArrayList<>() {{
             long page = 0;
             PagedSearchResult<ProductProjection> pagedSearchResult;
             do {

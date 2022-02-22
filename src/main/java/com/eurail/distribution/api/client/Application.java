@@ -1,11 +1,6 @@
 package com.eurail.distribution.api.client;
 
-import com.eurail.distribution.api.client.model.BusinessChannel;
-import com.eurail.distribution.api.client.model.FulfilmentMethod;
-import com.eurail.distribution.api.client.model.Gender;
-import com.eurail.distribution.api.client.model.PassCategory;
-import com.eurail.distribution.api.client.model.PaymentInterface;
-import com.eurail.distribution.api.client.model.RefundableLineItems;
+import com.eurail.distribution.api.client.model.*;
 import com.eurail.distribution.api.client.service.CartService;
 import com.eurail.distribution.api.client.service.OrderService;
 import com.eurail.distribution.api.client.service.ProductProjectionSearchService;
@@ -19,7 +14,6 @@ import io.sphere.sdk.carts.LineItemDraftBuilder;
 import io.sphere.sdk.client.SphereApiConfig;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereClientFactory;
-import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.DefaultCurrencyUnits;
 import io.sphere.sdk.models.ResourceIdentifier;
@@ -30,11 +24,7 @@ import io.sphere.sdk.states.State;
 import io.sphere.sdk.types.CustomFieldsDraft;
 import javax.money.CurrencyUnit;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class Application {
     private static final String API_URL = System.getenv("EURAIL_CT_API_URL");
@@ -99,8 +89,12 @@ public class Application {
             RefundableLineItems refundableLineItems = orderService.getRefundableLineItems(order);
 
             //  TODO. Implement it.
+            //  Get mobile pass info
+            MobilePassInfo mobilePassInfo = orderService.getMobilePassInfo(order.getId(), order.getLineItems().iterator().next().getId());
+
+            //  TODO. Implement it.
             //  Create refund
-            order = orderService.createRefund(order, null);
+            order = orderService.createRefund(order, Set.of(order.getLineItems().iterator().next()));
 
         } catch (final Exception e) {
             System.out.println(e);
@@ -110,10 +104,9 @@ public class Application {
 
     private static Cart updateCart(final CartService cartService, final Cart cart, final Locale locale, final String email) {
         //  Collect all update actions and make one http request
-        return cartService.executeUpdates(cart, new ArrayList<UpdateAction<Cart>>() {{
-            add(CartService.setLocaleAction(locale));
-            add(CartService.setCustomerEmailAction(email));
-        }});
+        return cartService.executeUpdates(cart, List.of(
+                CartService.setLocaleAction(locale),
+                CartService.setCustomerEmailAction(email)));
     }
 
     private static CartDraft createCartDraft(
@@ -161,7 +154,7 @@ public class Application {
             final CountryCode countryOfResidence,
             final FulfilmentMethod fulfilmentMethod,
             final PassCategory passCategory) {
-        return new HashMap<String, Object>(){{
+        return new HashMap<>(){{
             put("travellerFirstName", firstName);
             put("travellerLastName", lastName);
             put("dateOfBirth", dateOfBirth);
@@ -175,7 +168,7 @@ public class Application {
     private static Map<String, Object> createCartCustomFieldsObject(
             final BusinessChannel businessChannel,
             final FulfilmentMethod fulfilmentMethod) {
-        return new HashMap<String, Object>(){{
+        return new HashMap<>(){{
             put("businessChannel", businessChannel.getKey());
             put("fulfilmentMethod", fulfilmentMethod.getKey());
         }};
